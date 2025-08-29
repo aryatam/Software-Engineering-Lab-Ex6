@@ -4,6 +4,8 @@ import com.energy.model.BuildingEnergySystem;
 import com.energy.model.pricing.*;
 import com.energy.model.state.*;
 
+
+
 import java.util.Scanner;
 
 public class ConsoleUI {
@@ -54,28 +56,36 @@ public class ConsoleUI {
     }
 
     private void changePricing() {
-        System.out.println("تعرفه‌ها: 1) Standard  2) Peak Hours  3) Green Mode");
-        int c = readInt("انتخاب: ");
-        switch (c) {
-            case 1 -> system.setPricing(new StandardPricing());
-            case 2 -> system.setPricing(new PeakHoursPricing());
-            case 3 -> system.setPricing(new GreenModePricing());
-            default -> System.out.println("گزینه نامعتبر");
+        System.out.println("تعرفه‌ها:");
+        for (var o : PricingOption.values()) {
+            System.out.printf("%d) %s%n", o.code(), o.title());
         }
-        System.out.println("تعرفه جدید → " + system.getPricing().name());
+        int c = readInt("انتخاب: ");
+        try {
+            var opt = PricingOption.fromCode(c);
+            system.setPricing(opt.strategy()); // اگر Facade نداری همین خط درست است
+            System.out.println("تعرفه جدید → " + opt.title());
+        } catch (IllegalArgumentException e) {
+            System.out.println("گزینه نامعتبر");
+        }
     }
 
+
     private void changeState() {
-        System.out.println("وضعیت‌ها: 1) Active  2) Eco Mode  3) Shutdown");
-        int c = readInt("انتخاب: ");
-        switch (c) {
-            case 1 -> system.setState(new ActiveState());
-            case 2 -> system.setState(new EcoModeState());
-            case 3 -> system.setState(new ShutdownState());
-            default -> System.out.println("گزینه نامعتبر");
+        System.out.println("وضعیت‌ها:");
+        for (var o : StateOption.values()) {
+            System.out.printf("%d) %s%n", o.code(), o.title());
         }
-        System.out.println("وضعیت جدید → " + system.getState().name());
+        int c = readInt("انتخاب: ");
+        try {
+            var opt = StateOption.fromCode(c);
+            system.setState(opt.state()); // اگر Facade نداری همین خط درست است
+            System.out.println("وضعیت جدید → " + opt.title());
+        } catch (IllegalArgumentException e) {
+            System.out.println("گزینه نامعتبر");
+        }
     }
+
 
     private void calcCost() {
         double units = readDouble("تعداد واحد مصرف: ");
