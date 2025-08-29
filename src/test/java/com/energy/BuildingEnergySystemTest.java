@@ -21,7 +21,6 @@ public class BuildingEnergySystemTest {
         BuildingEnergySystem sys = new BuildingEnergySystem();
         sys.setPricing(new StandardPricing());
         sys.setState(new EcoModeState());
-        // 10 units → multiplier 0.4 → 4 effective units × 500 = 2000
         assertEquals(2000.0, sys.calculateCost(10), 1e-9);
     }
 
