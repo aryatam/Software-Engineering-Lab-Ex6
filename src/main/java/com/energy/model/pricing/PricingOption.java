@@ -3,16 +3,15 @@ package com.energy.model.pricing;
 public enum PricingOption {
     STANDARD(1, "Standard", new StandardPricing()),
     PEAK_HOURS(2, "Peak Hours", new PeakHoursPricing()),
-    GREEN_MODE(3, "Green Mode", new GreenModePricing());
+    GREEN_MODE(3, "Green Mode", new GreenModePricing()),
+    HOLIDAY(4, "Holiday", new HolidayPricing()); // ← افزوده شد
 
     private final int code;
     private final String title;
     private final EnergyPricingStrategy strategy;
 
     PricingOption(int code, String title, EnergyPricingStrategy strategy) {
-        this.code = code;
-        this.title = title;
-        this.strategy = strategy;
+        this.code = code; this.title = title; this.strategy = strategy;
     }
 
     public int code() { return code; }
