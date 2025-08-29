@@ -4,8 +4,11 @@ import com.energy.model.pricing.*;
 import com.energy.model.state.*;
 
 public class BuildingEnergySystem {
+
     private EnergyPricingStrategy pricing;
     private SystemState state;
+
+    private double totalUnits = 0;
 
     public BuildingEnergySystem() {
         setPricing(new StandardPricing());
@@ -28,8 +31,10 @@ public class BuildingEnergySystem {
     }
 
     public String status() {
-        return String.format("وضعیت: %s | تعرفه: %s (%,.0f تومان/واحد)",
-                getState().name(), getPricing().name(), getPricing().costPerUnit());
+        return String.format(
+                "وضعیت: %s | تعرفه: %s (%,.0f تومان/واحد) | مصرف تجمعی: %,.1f واحد",
+                getState().name(), getPricing().name(), getPricing().costPerUnit(), getTotalUnits()
+        );
     }
 
     public double calculateCost(double units) {
@@ -37,6 +42,13 @@ public class BuildingEnergySystem {
         double effectiveUnits = units * getState().consumptionMultiplier();
         return getPricing().calculate(effectiveUnits);
     }
+
+    public void addConsumption(double units) {
+        if (units < 0) throw new IllegalArgumentException("units cannot be negative");
+        totalUnits += units;
+    }
+
+    public double getTotalUnits() { return totalUnits; }
 
     public void log(String msg) { System.out.println(msg); }
 }
